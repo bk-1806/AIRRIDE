@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AIRRIDE – Airport Transfers Made Simple</title>
+  <meta name="description" content="AIRRIDE – Book reliable airport taxi transfers in seconds."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+<div id="app">
+  <div class="phone-shell" id="phone-shell">
+
+    <!-- STATUS BAR -->
+    <div class="phone-status-bar" id="status-bar">
+      <span class="status-time" id="status-time">9:41</span>
+      <div class="status-icons">
+        <svg width="17" height="12" viewBox="0 0 17 12"><rect x="0" y="4" width="3" height="8" rx="1" fill="currentColor" opacity="0.35"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="1" fill="currentColor" opacity="0.6"/><rect x="9" y="0" width="3" height="12" rx="1" fill="currentColor"/><path d="M14 3v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/></svg>
+        <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.5C10.2 2.5 12.2 3.4 13.6 4.9L15 3.4C13.2 1.5 10.7 0.5 8 0.5C5.3 0.5 2.8 1.5 1 3.4L2.4 4.9C3.8 3.4 5.8 2.5 8 2.5Z" fill="currentColor"/><path d="M8 5.5C9.5 5.5 10.8 6.1 11.8 7L13.2 5.5C11.8 4.2 9.9 3.5 8 3.5C6.1 3.5 4.2 4.2 2.8 5.5L4.2 7C5.2 6.1 6.5 5.5 8 5.5Z" fill="currentColor"/><circle cx="8" cy="10" r="1.5" fill="currentColor"/></svg>
+        <svg width="26" height="13" viewBox="0 0 26 13"><rect x="0.5" y="0.5" width="22" height="12" rx="2.5" stroke="currentColor" stroke-opacity="0.35"/><rect x="2" y="2" width="17" height="9" rx="1.5" fill="currentColor"/><path d="M24 4.5V8.5C24.9 8.1 25.5 7.1 25.5 6.5C25.5 5.9 24.9 4.9 24 4.5Z" fill="currentColor" opacity="0.4"/></svg>
+      </div>
+    </div>
+
+    <!-- NOTCH -->
+    <div class="phone-notch" id="phone-notch"></div>
+
+    <!-- SCREEN CONTAINER -->
+    <div class="screen-container" id="screen-container">
+
+      <!-- ═══════════════════════════════════════════════
+           S1: SPLASH
+           ═══════════════════════════════════════════════ -->
+      <div class="screen active" id="s-splash" data-screen="splash">
+        <div class="splash-wrap">
+          <div class="splash-logo-box">
+            <svg class="splash-plane" viewBox="0 0 24 24" fill="none">
+              <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" fill="white"/>
+            </svg>
+            <span class="splash-logo-lbl">LOGO</span>
+          </div>
+          <h1 class="splash-title">AIRRIDE</h1>
+          <p class="splash-sub">AIRPORT TRANSFERS · MADE SIMPLE</p>
+          <div class="splash-bar"><div class="splash-fill" id="splash-fill"></div></div>
+          <p class="splash-lding">LOADING...</p>
+          <div class="splash-ft">
+            <p class="splash-ver">VERSION 1.0.0</p>
+            <p class="splash-copy">© 2024 AIRRIDE INC. ALL RIGHTS RESERVED.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════
+           S2: LOGIN
+           ═══════════════════════════════════════════════ -->
+      <div class="screen" id="s-login" data-screen="login">
+        <div class="login-illo">
+          <div class="illo-inner">
+            <svg class="illo-lines" viewBox="0 0 375 200" preserveAspectRatio="none">
+              <line x1="0" y1="0" x2="375" y2="200" stroke="#ccc" stroke-width="1"/>
+              <line x1="375" y1="0" x2="0" y2="200" stroke="#ccc" stroke-width="1"/>
+            </svg>
+            <div class="illo-icon-box">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" fill="#aaa"/></svg>
+            </div>
+            <span class="illo-cap">TAXI + AIRPORT ILLUSTRATION</span>
+          </div>
+        </div>
+        <div class="login-body">
+          <h2 class="page-title">WELCOME BACK</h2>
+          <p class="page-sub">Enter your mobile number to continue.</p>
+          <div class="fg">
+            <label class="flabel">MOBILE NUMBER</label>
+            <div class="phone-row">
+              <div class="cc-picker"><span>🇺🇸</span><span class="cc-val">+1</span>
+                <svg width="10" height="6"><path d="M1 1L5 5L9 1" stroke="#666" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
+              </div>
+              <input type="tel" id="login-phone" class="phone-num" placeholder="555 000 0000" autocomplete="tel"/>
+            </div>
+            <p class="fhint">We'll send a one-time password to verify your number.</p>
+          </div>
+          <button class="btn-blk" id="btn-send-otp">SEND OTP →</button>
+          <div class="or-div"><span>OR</span></div>
+          <button class="btn-google">
+            <svg width="18" height="18" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/><path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
+            CONTINUE WITH GOOGLE
+          </button>
+          <div class="login-ft">
+            <p>New to AirRide? <a href="#" class="lnk">Register here</a></p>
+            <p class="tiny">By continuing, you agree to our <a href="#" class="lnk">Terms of Service</a> &amp; <a href="#" class="lnk">Privacy Policy</a></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════
+           S3: OTP VERIFICATION
+           ═══════════════════════════════════════════════ -->
+      <div class="screen" id="s-otp" data-screen="otp">
+        <div class="inner-page">
+          <div class="page-hdr">
+            <button class="back-btn" onclick="nav('login')">
+              <svg width="16" height="16"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
+              VERIFY NUMBER
+            </button>
+          </div>
+          <div class="otp-body">
+            <div class="otp-icon-ring">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="#333" stroke-width="1.5"/><path d="M2 7L12 13L22 7" stroke="#333" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </div>
+            <h2 class="page-title">ENTER OTP</h2>
+            <p class="page-sub">We sent a 6-digit code to</p>
+            <p class="otp-phone-num" id="otp-display-phone">+1 (555) 000-0000</p>
+            <a href="#" class="lnk tiny-lnk" onclick="nav('login');return false;">Change number</a>
+            <div class="otp-grid" id="otp-grid">
+              <input type="text" class="otp-cell" maxlength="1" inputmode="numeric"/>
+              <input type="text" class="otp-cell" maxlength="1" inputmode="numeric"/>
+              <input type="text" class="otp-cell" maxlength="1" inputmode="numeric"/>
+              <input type="text" class="otp-cell" maxlength="1" inputmode="numeric"/>
+              <input type="text" class="otp-cell" maxlength="1" inputmode="numeric"/>
+              <input type="text" class="otp-cell" maxlength="1" inputmode="numeric"/>
+            </div>
+            <p class="resend-hint">Didn't receive the code?</p>
+            <p class="resend-timer">Resend OTP in <strong id="otp-timer">0:42</strong></p>
+            <button class="btn-blk" id="btn-verify">VERIFY &amp; CONTINUE →</button>
+            <button class="btn-out" id="btn-resend">RESEND OTP</button>
+            <div class="security-note">
+              <svg width="12" height="14" viewBox="0 0 12 14"><rect x="1" y="5" width="10" height="8" rx="1.5" stroke="#888" stroke-width="1.2" fill="none"/><path d="M3.5 5V3.5C3.5 2.12 4.62 1 6 1C7.38 1 8.5 2.12 8.5 3.5V5" stroke="#888" stroke-width="1.2" stroke-linecap="round" fill="none"/></svg>
+              <span>Your OTP is valid for 5 minutes. Never share your OTP with anyone. AirRide will never ask for your OTP.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════
+           S4: HOME
+           ═══════════════════════════════════════════════ -->
+      <div class="screen" id="s-home" data-screen="home">
+        <div class="home-map-zone">
+          <div class="map-ph" id="home-map">
+            <div class="map-grid"></div>
+            <div class="map-pin-center">
+              <div class="map-dot-pulse"></div>
+            </div>
+            <span class="map-lbl">MAP PLACEHOLDER</span>
+          </div>
+          <div class="home-top-bar">
+            <div>
+              <p class="greeting-sm" id="greeting-text">GOOD MORNING,</p>
+              <h2 class="greeting-name">JOHN S. <span class="caret">→</span></h2>
+            </div>
+          </div>
+          <button class="map-zoom">+</button>
+        </div>
+        <div class="home-sheet">
+          <div class="sheet-handle"></div>
+          <p class="sheet-label">WHERE ARE YOU GOING?</p>
+          <div class="search-bar" onclick="nav('pickup')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#999" stroke-width="1.8"/><path d="M20 20l-3-3" stroke="#999" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <span class="search-ph">Search destination or airport...</span>
+          </div>
+          <div class="quick-pills">
+            <div class="pill" onclick="nav('pickup')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4" stroke="#333" stroke-width="1.8"/><circle cx="12" cy="12" r="9" stroke="#333" stroke-width="1.2" stroke-dasharray="2 2"/></svg>
+              <div><p class="pill-title">PICKUP</p><p class="pill-sub">Current Location</p></div>
+            </div>
+            <div class="pill-divider"></div>
+            <div class="pill" onclick="nav('datetime')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#333" stroke-width="1.8"/><path d="M12 7v5l3 3" stroke="#333" stroke-width="1.8" stroke-linecap="round"/></svg>
+              <div><p class="pill-title">SCHEDULE</p><p class="pill-sub" id="home-schedule-time">Now</p></div>
+            </div>
+          </div>
+          <p class="section-lbl">RECENT</p>
+          <div class="recent-list">
+            <div class="recent-item" onclick="selectDestination('JFK International – Terminal 4','JFK')">
+              <div class="recent-icon plane-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" fill="#333"/></svg>
+              </div>
+              <div class="recent-info">
+                <p class="recent-name">JFK International – Terminal 4</p>
+                <p class="recent-meta">Saved 3h ago</p>
+              </div>
+              <svg width="8" height="14" viewBox="0 0 8 14"><path d="M1 1L7 7L1 13" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
+            </div>
+            <div class="recent-item" onclick="selectDestination('Home – 123 Main Street','HOME')">
+              <div class="recent-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3L21 9.5V20H15v-5H9v5H3V9.5Z" stroke="#333" stroke-width="1.8" stroke-linejoin="round"/></svg>
+              </div>
+              <div class="recent-info">
+                <p class="recent-name">Home – 123 Main Street</p>
+                <p class="recent-meta">Saved address</p>
+              </div>
+              <svg width="8" height="14" viewBox="0 0 8 14"><path d="M1 1L7 7L1 13" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
+            </div>
+          </div>
+        </div>
+        <!-- Bottom Nav -->
+        <nav class="bottom-nav">
+          <button class="bnav-btn active" id="bnav-home" onclick="nav('home')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3L21 9.5V20H15v-5H9v5H3V9.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            <span>Home</span>
+          </button>
+          <button class="bnav-btn" id="bnav-trips" onclick="nav('history')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 9h8M8 13h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <span>Trips</span>
+          </button>
+          <button class="bnav-btn" id="bnav-profile" onclick="nav('profile')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <span>Profile</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════
+           S5: PICKUP LOCATION
+           ═══════════════════════════════════════════════ -->
+      <div class="screen" id="s-pickup" data-screen="pickup">
+        <div class="inner-page">
+          <div class="page-hdr">
+            <button class="back-btn" onclick="nav('home')">
+              <svg width="16" height="16"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
+              SET PICKUP LOCATION
+            </button>
+          </div>
+          <div class="search-bar-page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#999" stroke-width="1.8"/><path d="M20 20l-3-3" stroke="#999" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <input type="text" id="pickup-search" class="search-inp" placeholder="Search for pickup location..."/>
+            <button class="clear-btn" onclick="document.getElementById('pickup-search').value=''">CLEAR</button>
+          </div>
+          <div class="use-location-row" onclick="useCurrentLocation()">
+            <div class="use-loc-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4" stroke="white" stroke-width="2"/><circle cx="12" cy="12" r="9" stroke="white" stroke-width="1.5" stroke-dasharray="2 3"/></svg>
+            </div>
+            <div>
+              <p class="use-loc-title">USE CURRENT LOCATION</p>
+              <p class="use-loc-sub">GPS · Accuracy: ±10m</p>
+            </div>
+            <svg width="8" height="14" viewBox="0 0 8 14"><path d="M1 1L7 7L1 13" stroke="#ccc" stroke-width="1.5" fill="none"/></svg>
+          </div>
+          <div class="mini-map" id="pickup-map">
+            <div class="map-grid"></div>
+            <div class="mini-map-pin">
+              <div class="map-dot-pulse"></div>
+            </div>
+            <span class="map-lbl sm">MAP PLACEHOLDER</span>
+          </div>
+          <div class="selected-addr-row">
+            <div class="addr-dot"></div>
+            <span id="pickup-address">78 Maple Avenue, Brooklyn, NY 11201</span>
+          </div>
+          <p class="section-lbl">SAVED ADDRESSES</p>
+          <div class="addr-list">
+            <div class="addr-item" onclick="setPickup('123 Main Street, New York, NY')">
+              <div class="addr-icon home-addr">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3L21 9.5V20H15v-5H9v5H3V9.5Z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg>
+              </div>
+              <div class="addr-info"><p class="addr-name">Home</p><p class="addr-sub">123 Main Street, New York, NY</p></div>
+              <svg width="8" height="14" viewBox="0 0 8 14"><path d="M1 1L7 7L1 13" stroke="#ccc" stroke-width="1.5" fill="none"/></svg>
+            </div>
+            <div class="addr-item" onclick="setPickup('456 Business Ave, Manhattan, NY')">
+              <div class="addr-icon work-addr">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="3" y="8" width="18" height="13" rx="1" stroke="white" stroke-width="2"/><path d="M8 8V6a4 4 0 0 1 8 0v2" stroke="white" stroke-width="2"/></svg>
+              </div>
+              <div class="addr-info"><p class="addr-name">Work</p><p class="addr-sub">456 Business Ave, Manhattan, NY</p></div>
+              <svg width="8" height="14" viewBox="0 0 8 14"><path d="M1 1L7 7L1 13" stroke="#ccc" stroke-width="1.5" fill="none"/></svg>
+            </div>
+          </div>
+          <p class="section-lbl">NEARBY LOCATIONS</p>
+          <div class="addr-list">
+            <div class="addr-item" onclick="setPickup('Central Park West Entrance, New York, NY')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="10" r="3" stroke="#888" stroke-width="1.5"/><path d="M12 2C7.58 2 4 5.58 4 10c0 5.25 8 12 8 12s8-6.75 8-12c0-4.42-3.58-8-8-8z" stroke="#888" stroke-width="1.5" fill="none"/></svg>
+              <div class="addr-info"><p class="addr-name">Central Park West Entrance</p><p class="addr-sub">0.2 mi away</p></div>
+              <svg width="8" height="14" viewBox="0 0 8 14"><path d="M1 1L7 7L1 13" stroke="#ccc" stroke-width="1.5" fill="none"/></svg>
+            </div>
+            <div class="addr-item" onclick="setPickup('Times Square Station, New York, NY')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="10" r="3" stroke="#888" stroke-width="1.5"/><path d="M12 2C7.58 2 4 5.58 4 10c0 5.25 8 12 8 12s8-6.75 8-12c0-4.42-3.58-8-8-8z" stroke="#888" stroke-width="1.5" fill="none"/></svg>
+              <div class="addr-info"><p class="addr-name">Times Square Station</p><p class="addr-sub">0.5 mi away</p></div>
+              <svg width="8" height="14" viewBox="0 0 8 14"><path d="M1 1L7 7L1 13" stroke="#ccc" stroke-width="1.5" fill="none"/></svg>
+            </div>
+            <div class="addr-item" onclick="setPickup('Penn Station – 34th St, New York, NY')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="10" r="3" stroke="#888" stroke-width="1.5"/><path d="M12 2C7.58 2 4 5.58 4 10c0 5.25 8 12 8 12s8-6.75 8-12c0-4.42-3.58-8-8-8z" stroke="#888" stroke-width="1.5" fill="none"/></svg>
+              <div class="addr-info"><p class="addr-name">Penn Station – 34th St</p><p class="addr-sub">0.8 mi away</p></div>
+              <svg width="8" height="14" viewBox="0 0 8 14"><path d="M1 1L7 7L1 13" stroke="#ccc" stroke-width="1.5" fill="none"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════
+           S6: DESTINATION
+           ═══════════════════════════════════════════════ -->
+      <div class="screen" id="s-destination" data-screen="destination">
+        <div class="inner-page">
+          <div class="page-hdr">
+            <button class="back-btn" onclick="nav('pickup')">
+              <svg width="16" height="16"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
+              SET DESTINATION
+            </button>
+          </div>
+          <div class="route-mini-bar">
+            <div class="route-dot filled"></div>
+            <span id="dest-pickup-show">78 Maple Ave, Bro...</span>
+            <svg width="20" height="10"><path d="M2 5h16M14 2l4 3-4 3" stroke="#aaa" stroke-width="1.2" fill="none"/></svg>
+            <div class="route-dot empty"></div>
+            <span class="gray-text">Select destination</span>
+          </div>
+          <div class="search-bar-page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#999" stroke-width="1.8"/><path d="M20 20l-3-3" stroke="#999" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <input type="text" id="dest-search" class="search-inp" placeholder="Search airport, terminal, or address..."/>
+          </div>
+          <p class="section-lbl">NEARBY AIRPORTS</p>
+          <div class="airport-list">
+            <div class="airport-item" onclick="selectAirport('John F. Kennedy International','JFK','T1 · T4 · T8','18 mi')">
+              <div class="airport-code">JFK</div>
+              <div class="airport-info">
+                <p class="airport-name">John F. Kennedy International</p>
+                <p class="airport-meta">T1 · T4 · T8 · 18 mi</p>
+              </div>
+              <svg width="8" height="14" viewBox="0 0 8 14"><path d="M1 1L7 7L1 13" stroke="#ccc" stroke-width="1.5" fill="none"/></svg>
+            </div>
+            <div class="airport-item" onclick="selectAirport('LaGuardia Airport','LGA','T1 · T2 · T3','17 mi')">
+              <div class="airport-code">LGA</div>
+              <div class="airport-info">
+                <p class="airport-name">LaGuardia Airport</p>
+                <p class="airport-meta">T1 · T2 · T3 · 17 mi</p>
+              </div>
+              <svg width="8" height="14" viewBox="0 0 8 14"><path d="M1 1L7 7L1 13" stroke="#ccc" stroke-width="1.5" fill="none"/></svg>
+            </div>
+            <div class="airport-item" onclick="selectAirport('Newark Liberty International','EWR','A · B · C','22 mi')">
+              <div class="airport-code">EWR</div>
+              <div class="airport-info">
+                <p class="airport-name">Newark Liberty International</p>
+                <p class="airport-meta">A · B · C · 22 mi</p>
+              </div>
+              <svg width="8" height="14" viewBox="0 0 8 14"><path d="M1 1L7 7L1 13" stroke="#ccc" stroke-width="1.5" fill="none"/></svg>
+            </div>
+          </div>
+          <p class="section-lbl" id="terminal-section-lbl">JFK TERMINALS</p>
+          <div class="terminal-list" id="terminal-list">
+            <div class="terminal-item" onclick="selectTerminal('Terminal 1 – International Departures','JFK T1')">
+              <svg width="14" height="14" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" fill="#888"/></svg>
+              <span>Terminal 1 – International Departures</span>
+              <svg width="8" height="14" viewBox="0 0 8 14"><path d="M1 1L7 7L1 13" stroke="#ccc" stroke-width="1.5" fill="none"/></svg>
+            </div>
+            <div class="terminal-item" onclick="selectTerminal('Terminal 4 – American Airlines Hub','JFK T4')">
+              <svg width="14" height="14" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" fill="#888"/></svg>
+              <span>Terminal 4 – American Airlines Hub</span>
+              <svg width="8" height="14" viewBox="0 0 8 14"><path d="M1 1L7 7L1 13" stroke="#ccc" stroke-width="1.5" fill="none"/></svg>
+            </div>
+            <div class="terminal-item" onclick="selectTerminal('Terminal 8 – British Airways','JFK T8')">
+              <svg width="14" height="14" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" fill="#888"/></svg>
+              <span>Terminal 8 – British Airways</span>
+              <svg width="8" height="14" viewBox="0 0 8 14"><path d="M1 1L7 7L1 13" stroke="#ccc" stroke-width="1.5" fill="none"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="sticky-bottom">
+          <button class="btn-blk" id="btn-confirm-dest" onclick="confirmDestination()">CONFIRM DESTINATION →</button>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════
+           S7: DATE & TIME
+           ═══════════════════════════════════════════════ -->
+      <div class="screen" id="s-datetime" data-screen="datetime">
+        <div class="inner-page">
+          <div class="page-hdr">
+            <button class="back-btn" onclick="nav('destination')">
+              <svg width="16" height="16"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
+              DATE &amp; TIME
+            </button>
+          </div>
+          <div class="dt-body">
+            <div class="dt-tabs">
+              <button class="dt-tab active" onclick="switchDateTab('today',this)">TODAY</button>
+              <button class="dt-tab" onclick="switchDateTab('tomorrow',this)">TOMORROW</button>
+              <button class="dt-tab" onclick="switchDateTab('custom',this)">CUSTOM DATE</button>
+            </div>
+            <div id="dt-date-display" class="dt-date-display">
+              <span id="dt-selected-date">Wednesday, Jun 4 2025</span>
+            </div>
+            <div class="cal-grid" id="cal-grid"></div>
+            <p class="section-lbl" style="margin-top:20px">SELECT PICKUP TIME</p>
+            <div class="time-slots" id="time-slots"></div>
+            <div class="dt-summary">
+              <div class="dt-sum-row">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="17" rx="2" stroke="#333" stroke-width="1.5"/><path d="M16 2v4M8 2v4M3 10h18" stroke="#333" stroke-width="1.5"/></svg>
+                <span id="dt-sum-date">Wednesday, Jun 4 2025</span>
+              </div>
+              <div class="dt-sum-row">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#333" stroke-width="1.5"/><path d="M12 7v5l3 3" stroke="#333" stroke-width="1.5" stroke-linecap="round"/></svg>
+                <span id="dt-sum-time">10:00 AM</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="sticky-bottom">
+          <button class="btn-blk" onclick="confirmDateTime()">CONFIRM DATE &amp; TIME →</button>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════
+           S8: FLIGHT NUMBER
+           ═══════════════════════════════════════════════ -->
+      <div class="screen" id="s-flight" data-screen="flight">
+        <div class="inner-page">
+          <div class="page-hdr">
+            <button class="back-btn" onclick="nav('datetime')">
+              <svg width="16" height="16"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
+              FLIGHT NUMBER
+            </button>
+          </div>
+          <div class="flight-body">
+            <div class="flight-illo">
+              <svg viewBox="0 0 80 50" fill="none">
+                <path d="M70 25v-3l-27-17V1.5c0-1.4-1.1-2.5-2.5-2.5S38 .1 38 1.5V5L11 22v3l27-8.5V33l-7 5v3.5l10-2.5 10 2.5V38l-7-5V16.5L70 25z" fill="#ddd"/>
+                <rect x="5" y="40" width="70" height="3" rx="1.5" fill="#eee"/>
+              </svg>
+            </div>
+            <h2 class="page-title">ADD FLIGHT NUMBER</h2>
+            <p class="page-sub">We'll monitor your flight and adjust pickup time accordingly.</p>
+            <div class="fg">
+              <label class="flabel">FLIGHT NUMBER</label>
+              <input type="text" id="flight-input" class="big-input" placeholder="e.g. AA 123" maxlength="8" style="text-transform:uppercase"/>
+              <p class="fhint">Enter your airline code + flight number (e.g. AA 123, UA 456, DL 789)</p>
+            </div>
+            <div class="flight-lookup" id="flight-lookup" style="display:none">
+              <div class="flight-result-card">
+                <div class="fr-airline">
+                  <span class="airline-code" id="fr-code">AA</span>
+                  <span id="fr-airline-name">American Airlines</span>
+                </div>
+                <div class="fr-route">
+                  <div class="fr-city">
+                    <p class="fr-iata" id="fr-from-iata">LAX</p>
+                    <p class="fr-city-name" id="fr-from-city">Los Angeles</p>
+                  </div>
+                  <svg width="60" height="20" viewBox="0 0 60 20"><path d="M5 10h50M45 5l10 5-10 5" stroke="#333" stroke-width="1.5" stroke-linecap="round" fill="none"/><path d="M28 5v-3l-6-3v2l6 3z M24 8v-3" stroke="#333" stroke-width="1" fill="#333"/></svg>
+                  <div class="fr-city">
+                    <p class="fr-iata" id="fr-to-iata">JFK</p>
+                    <p class="fr-city-name" id="fr-to-city">New York</p>
+                  </div>
+                </div>
+                <div class="fr-times">
+                  <div><p class="fr-t-label">DEPARTS</p><p class="fr-t" id="fr-departs">11:30 AM</p></div>
+                  <div><p class="fr-t-label">ARRIVES</p><p class="fr-t" id="fr-arrives">7:45 PM</p></div>
+                  <div><p class="fr-t-label">STATUS</p><p class="fr-t status-on-time" id="fr-status">ON TIME</p></div>
+                </div>
+              </div>
+            </div>
+            <div class="fg" style="margin-top:24px">
+              <p class="section-lbl">POPULAR AIRLINES</p>
+              <div class="airline-chips">
+                <button class="airline-chip" onclick="fillAirline('AA')">AA</button>
+                <button class="airline-chip" onclick="fillAirline('UA')">UA</button>
+                <button class="airline-chip" onclick="fillAirline('DL')">DL</button>
+                <button class="airline-chip" onclick="fillAirline('B6')">B6</button>
+                <button class="airline-chip" onclick="fillAirline('WN')">WN</button>
+                <button class="airline-chip" onclick="fillAirline('AS')">AS</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="sticky-bottom two-btns">
+          <button class="btn-out" onclick="skipFlight()">SKIP FOR NOW</button>
+          <button class="btn-blk" onclick="confirmFlight()">CONFIRM →</button>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════
+           S9: FARE ESTIMATE
+           ═══════════════════════════════════════════════ -->
+      <div class="screen" id="s-fare" data-screen="fare">
+        <div class="inner-page">
+          <div class="page-hdr">
+            <button class="back-btn" onclick="nav('flight')">
+              <svg width="16" height="16"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
+              FARE ESTIMATE
+            </button>
+          </div>
+          <div class="fare-route-bar">
+            <div class="fare-point">
+              <div class="fp-dot filled-blk"></div>
+              <div><p class="fp-label">PICKUP</p><p class="fp-addr" id="fare-pickup-addr">78 Maple Ave, Brooklyn</p></div>
+            </div>
+            <div class="fare-line"></div>
+            <div class="fare-point">
+              <div class="fp-dot outlined"></div>
+              <div><p class="fp-label">DROP-OFF</p><p class="fp-addr" id="fare-dest-addr">JFK T4 – American Airlines</p></div>
+            </div>
+          </div>
+          <div class="fare-meta-row">
+            <span class="fare-meta-chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#555" stroke-width="1.5"/><path d="M12 7v5l3 3" stroke="#555" stroke-width="1.5" stroke-linecap="round"/></svg> <span id="fare-time-chip">42 min</span></span>
+            <span class="fare-meta-chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M3 12h18M3 12l4-4M3 12l4 4" stroke="#555" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg> <span id="fare-dist-chip">18 mi</span></span>
+            <span class="fare-meta-chip" id="fare-flight-chip" style="display:none">✈ <span id="fare-flight-num">AA 123</span></span>
+          </div>
+          <p class="section-lbl" style="margin-top:16px">SELECT VEHICLE</p>
+          <div class="vehicle-list" id="vehicle-list">
+            <div class="vehicle-card selected" id="vc-economy" onclick="selectVehicle('economy',this)">
+              <div class="vc-icon">🚗</div>
+              <div class="vc-info">
+                <p class="vc-name">ECONOMY</p>
+                <p class="vc-meta">1–4 passengers · Standard sedan</p>
+              </div>
+              <div class="vc-price">
+                <p class="vc-fare">$42</p>
+                <p class="vc-eta">5 min</p>
+              </div>
+            </div>
+            <div class="vehicle-card" id="vc-comfort" onclick="selectVehicle('comfort',this)">
+              <div class="vc-icon">🚙</div>
+              <div class="vc-info">
+                <p class="vc-name">COMFORT</p>
+                <p class="vc-meta">1–4 passengers · Premium sedan</p>
+              </div>
+              <div class="vc-price">
+                <p class="vc-fare">$58</p>
+                <p class="vc-eta">3 min</p>
+              </div>
+            </div>
+            <div class="vehicle-card" id="vc-suv" onclick="selectVehicle('suv',this)">
+              <div class="vc-icon">🚐</div>
+              <div class="vc-info">
+                <p class="vc-name">SUV XL</p>
+                <p class="vc-meta">1–6 passengers · Large SUV</p>
+              </div>
+              <div class="vc-price">
+                <p class="vc-fare">$74</p>
+                <p class="vc-eta">7 min</p>
+              </div>
+            </div>
+          </div>
+          <div class="fare-breakdown">
+            <p class="section-lbl">FARE BREAKDOWN</p>
+            <div class="fb-row"><span>Base fare</span><span id="fb-base">$30.00</span></div>
+            <div class="fb-row"><span>Distance (18 mi)</span><span>$9.00</span></div>
+            <div class="fb-row"><span>Airport fee</span><span>$3.00</span></div>
+            <div class="fb-divider"></div>
+            <div class="fb-row total"><span>TOTAL ESTIMATE</span><span id="fb-total">$42.00</span></div>
+          </div>
+          <p class="fare-note">Final price may vary based on traffic and wait time.</p>
+        </div>
+        <div class="sticky-bottom">
+          <button class="btn-blk" onclick="nav('confirm')">BOOK RIDE →</button>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════
+           S10: BOOKING CONFIRMATION
+           ═══════════════════════════════════════════════ -->
+      <div class="screen" id="s-confirm" data-screen="confirm">
+        <div class="inner-page">
+          <div class="page-hdr">
+            <button class="back-btn" onclick="nav('fare')">
+              <svg width="16" height="16"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
+              BOOKING CONFIRMATION
+            </button>
+          </div>
+          <div class="confirm-body">
+            <div class="confirm-tick">
+              <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="17" stroke="#0a0a0a" stroke-width="1.5"/><path d="M10 18l6 6 10-12" stroke="#0a0a0a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h2 class="confirm-title">BOOKING CONFIRMED</h2>
+            <p class="confirm-sub">Your driver is being assigned</p>
+            <div class="booking-id-box">
+              <p class="bid-label">BOOKING ID</p>
+              <p class="bid-val" id="booking-id">ARR-20241204-8472</p>
+            </div>
+            <div class="confirm-details">
+              <div class="cd-row">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="10" r="3" stroke="#555" stroke-width="1.5"/><path d="M12 2C7.58 2 4 5.58 4 10c0 5.25 8 12 8 12s8-6.75 8-12c0-4.42-3.58-8-8-8z" stroke="#555" stroke-width="1.5"/></svg>
+                <div><p class="cd-label">PICKUP</p><p class="cd-val" id="cd-pickup">78 Maple Ave, Brooklyn, NY</p></div>
+              </div>
+              <div class="cd-row">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" fill="#555"/></svg>
+                <div><p class="cd-label">DESTINATION</p><p class="cd-val" id="cd-dest">JFK T4 – American Airlines</p></div>
+              </div>
+              <div class="cd-row">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#555" stroke-width="1.5"/><path d="M12 7v5l3 3" stroke="#555" stroke-width="1.5" stroke-linecap="round"/></svg>
+                <div><p class="cd-label">PICKUP TIME</p><p class="cd-val" id="cd-time">Wed, Jun 4 · 10:00 AM</p></div>
+              </div>
+              <div class="cd-row">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="14" rx="2" stroke="#555" stroke-width="1.5"/><circle cx="8" cy="13" r="1" fill="#555"/><circle cx="12" cy="13" r="1" fill="#555"/><circle cx="16" cy="13" r="1" fill="#555"/></svg>
+                <div><p class="cd-label">VEHICLE</p><p class="cd-val" id="cd-vehicle">Economy · $42.00</p></div>
+              </div>
+            </div>
+            <div class="driver-assign-card" id="driver-card">
+              <div class="driver-ava" id="driver-ava">JS</div>
+              <div class="driver-info">
+                <p class="driver-name" id="driver-name">James Sullivan</p>
+                <div class="driver-meta">
+                  <span class="driver-rating">★ 4.9</span>
+                  <span class="driver-plate" id="driver-plate">NYC · TXI 4827</span>
+                </div>
+                <p class="driver-car" id="driver-car">Toyota Camry · Silver</p>
+              </div>
+              <button class="driver-call-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6.6 10.8C7.8 13.2 9.8 15.2 12.2 16.4L14.2 14.4C14.5 14.1 14.9 14 15.3 14.2C16.5 14.6 17.8 14.8 19 14.8C19.6 14.8 20 15.2 20 15.8V19C20 19.6 19.6 20 19 20C10.2 20 3 12.8 3 4C3 3.4 3.4 3 4 3H7.5C8.1 3 8.5 3.4 8.5 4C8.5 5.2 8.7 6.5 9.1 7.7C9.2 8.1 9.1 8.5 8.8 8.8L6.6 10.8Z" fill="#333"/></svg>
+              </button>
+            </div>
+            <div class="confirm-actions">
+              <button class="btn-out sm" onclick="nav('tracking')">TRACK DRIVER →</button>
+              <button class="btn-ghost sm" onclick="cancelBooking()">CANCEL BOOKING</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════
+           S11: DRIVER TRACKING
+           ═══════════════════════════════════════════════ -->
+      <div class="screen" id="s-tracking" data-screen="tracking">
+        <div class="tracking-map">
+          <div class="map-ph full-map" id="tracking-map">
+            <div class="map-grid"></div>
+            <div class="tracking-car" id="tracking-car">🚗</div>
+            <div class="tracking-dest-pin">
+              <svg width="20" height="24" viewBox="0 0 20 24" fill="none"><path d="M10 0C4.48 0 0 4.48 0 10C0 17.5 10 24 10 24C10 24 20 17.5 20 10C20 4.48 15.52 0 10 0Z" fill="#0a0a0a"/><circle cx="10" cy="10" r="4" fill="white"/></svg>
+            </div>
+            <span class="map-lbl">LIVE MAP</span>
+          </div>
+          <div class="tracking-top-bar">
+            <button class="back-btn-white" onclick="nav('confirm')">
+              <svg width="16" height="16"><path d="M10 3L5 8L10 13" stroke="white" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
+            </button>
+            <div class="eta-badge">
+              <p class="eta-min" id="eta-minutes">8 MIN</p>
+              <p class="eta-lbl">DRIVER ETA</p>
+            </div>
+          </div>
+        </div>
+        <div class="tracking-sheet">
+          <div class="sheet-handle"></div>
+          <div class="tracking-driver-row">
+            <div class="driver-ava lg" id="track-ava">JS</div>
+            <div class="tracking-driver-info">
+              <p class="track-driver-name" id="track-name">James Sullivan</p>
+              <div class="track-meta">
+                <span class="driver-rating" id="track-rating">★ 4.9</span>
+                <span>·</span>
+                <span id="track-plate">TXI 4827</span>
+                <span>·</span>
+                <span id="track-car">Toyota Camry</span>
+              </div>
+              <p class="track-status" id="track-status">Driver is heading to your pickup</p>
+            </div>
+            <div class="track-actions">
+              <button class="track-action-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6.6 10.8C7.8 13.2 9.8 15.2 12.2 16.4L14.2 14.4C14.5 14.1 14.9 14 15.3 14.2C16.5 14.6 17.8 14.8 19 14.8C19.6 14.8 20 15.2 20 15.8V19C20 19.6 19.6 20 19 20C10.2 20 3 12.8 3 4C3 3.4 3.4 3 4 3H7.5C8.1 3 8.5 3.4 8.5 4C8.5 5.2 8.7 6.5 9.1 7.7C9.2 8.1 9.1 8.5 8.8 8.8L6.6 10.8Z" fill="#333"/></svg>
+              </button>
+              <button class="track-action-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M20 2H4C2.9 2 2 2.9 2 4V16C2 17.1 2.9 18 4 18H8L12 22L16 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2Z" stroke="#333" stroke-width="1.8" fill="none"/><path d="M8 10h8M8 7h8M8 13h4" stroke="#333" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="tracking-route">
+            <div class="tr-point">
+              <div class="tr-dot pulse-dot"></div>
+              <div><p class="tr-label">YOUR LOCATION</p><p class="tr-addr" id="track-pickup">78 Maple Ave, Brooklyn</p></div>
+            </div>
+            <div class="tr-line"></div>
+            <div class="tr-point">
+              <div class="tr-dot black-dot"></div>
+              <div><p class="tr-label">DESTINATION</p><p class="tr-addr" id="track-dest">JFK T4 – American Airlines</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════
+           S11.5: RATE YOUR TRIP
+           ═══════════════════════════════════════════════ -->
+      <div class="screen" id="s-rating" data-screen="rating">
+        <div class="inner-page scroll" style="align-items:center;padding:32px 20px">
+          <div style="height: 40px;"></div>
+          <div class="confirm-tick">
+            <svg width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" stroke="#0a0a0a" stroke-width="1.5" fill="none"/><path d="M11 20l7 7 11-14" stroke="#0a0a0a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+          </div>
+          <h2 class="confirm-title" style="margin-top:16px">RATE YOUR TRIP</h2>
+          <p class="confirm-sub">We hope you had a safe and comfortable ride with AIRRIDE.</p>
+
+          <div class="driver-assign-card" style="margin-top:24px;width:100%;display:flex;">
+            <div class="driver-ava" id="rating-driver-ava">JS</div>
+            <div class="driver-info">
+              <p class="driver-name" id="rating-driver-name">James Sullivan</p>
+              <div class="driver-meta">
+                <span class="driver-plate" id="rating-driver-plate">TXI 4827</span>
+                <span>·</span>
+                <span id="rating-driver-car">Toyota Camry</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="rate-section" style="margin-top:32px;text-align:center">
+            <p class="section-lbl" style="letter-spacing:2px;font-size:11px;color:#888;margin-bottom:12px">TAP TO RATE YOUR DRIVER</p>
+            <div class="stars" id="rating-stars" style="display:flex;gap:12px;justify-content:center;font-size:36px;color:#ccc;cursor:pointer;user-select:none">
+              <span class="star" data-val="1" style="transition:color 0.2s">★</span>
+              <span class="star" data-val="2" style="transition:color 0.2s">★</span>
+              <span class="star" data-val="3" style="transition:color 0.2s">★</span>
+              <span class="star" data-val="4" style="transition:color 0.2s">★</span>
+              <span class="star" data-val="5" style="transition:color 0.2s">★</span>
+            </div>
+          </div>
+
+          <div style="width:100%;margin-top:24px">
+            <textarea id="rating-comment" placeholder="Write a review... (optional)" style="width:100%;height:80px;padding:12px;border:1px solid #e0e0e0;border-radius:12px;font-family:inherit;font-size:13px;resize:none;outline:none"></textarea>
+          </div>
+
+          <button class="btn-blk" style="margin-top:32px;width:100%" id="submit-rating-btn">SUBMIT RATING</button>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════
+           S12: RIDE HISTORY
+           ═══════════════════════════════════════════════ -->
+      <div class="screen" id="s-history" data-screen="history">
+        <div class="inner-page">
+          <div class="page-hdr">
+            <button class="back-btn" onclick="nav('home')">
+              <svg width="16" height="16"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
+              RIDE HISTORY
+            </button>
+          </div>
+          <div class="history-tabs">
+            <button class="htab active" onclick="filterHistory('all',this)">ALL</button>
+            <button class="htab" onclick="filterHistory('completed',this)">COMPLETED</button>
+            <button class="htab" onclick="filterHistory('cancelled',this)">CANCELLED</button>
+          </div>
+          <div class="history-list" id="history-list">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+        <nav class="bottom-nav">
+          <button class="bnav-btn" onclick="nav('home')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3L21 9.5V20H15v-5H9v5H3V9.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            <span>Home</span>
+          </button>
+          <button class="bnav-btn active">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 9h8M8 13h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <span>Trips</span>
+          </button>
+          <button class="bnav-btn" onclick="nav('profile')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <span>Profile</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════
+           S13: PROFILE
+           ═══════════════════════════════════════════════ -->
+      <div class="screen" id="s-profile" data-screen="profile">
+        <div class="inner-page scroll">
+          <div class="profile-header">
+            <div class="profile-ava" id="profile-initials">JS</div>
+            <div class="profile-info">
+              <h2 class="profile-name" id="profile-name">John Sullivan</h2>
+              <p class="profile-phone" id="profile-phone">+1 (555) 000-0000</p>
+              <div class="profile-badges">
+                <span class="badge">✈ 12 rides</span>
+                <span class="badge">★ 4.9</span>
+                <span class="badge verified">✓ Verified</span>
+              </div>
+            </div>
+            <button class="edit-profile-btn" onclick="editProfile()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M11 4H4C2.9 4 2 4.9 2 6V20C2 21.1 2.9 22 4 22H18C19.1 22 20 21.1 20 20V13" stroke="#333" stroke-width="1.8" stroke-linecap="round"/><path d="M18.5 2.5L21.5 5.5L12 15H9V12L18.5 2.5Z" stroke="#333" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+
+          <div class="profile-stats">
+            <div class="pstat"><p class="pstat-val">12</p><p class="pstat-label">Rides</p></div>
+            <div class="pstat-div"></div>
+            <div class="pstat"><p class="pstat-val">$486</p><p class="pstat-label">Spent</p></div>
+            <div class="pstat-div"></div>
+            <div class="pstat"><p class="pstat-val">★ 4.9</p><p class="pstat-label">Rating</p></div>
+          </div>
+
+          <p class="section-lbl" style="margin-top:20px">ACCOUNT</p>
+          <div class="settings-list">
+            <div class="setting-item" onclick="openSetting('personal')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#333" stroke-width="1.8"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#333" stroke-width="1.8" stroke-linecap="round"/></svg>
+              <div class="setting-info"><p class="setting-name">Personal Information</p><p class="setting-sub">Name, email, phone</p></div>
+              <svg width="8" height="14" viewBox="0 0 8 14"><path d="M1 1L7 7L1 13" stroke="#ccc" stroke-width="1.5" fill="none"/></svg>
+            </div>
+            <div class="setting-item" onclick="openSetting('payment')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="2" y="5" width="20" height="14" rx="2" stroke="#333" stroke-width="1.8"/><path d="M2 10h20" stroke="#333" stroke-width="1.8"/><rect x="5" y="14" width="4" height="2" rx="1" fill="#333"/></svg>
+              <div class="setting-info"><p class="setting-name">Payment Methods</p><p class="setting-sub">Cards, PayPal, Apple Pay</p></div>
+              <svg width="8" height="14" viewBox="0 0 8 14"><path d="M1 1L7 7L1 13" stroke="#ccc" stroke-width="1.5" fill="none"/></svg>
+            </div>
+            <div class="setting-item" onclick="openSetting('addresses')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="10" r="3" stroke="#333" stroke-width="1.8"/><path d="M12 2C7.58 2 4 5.58 4 10c0 5.25 8 12 8 12s8-6.75 8-12c0-4.42-3.58-8-8-8z" stroke="#333" stroke-width="1.8"/></svg>
+              <div class="setting-info"><p class="setting-name">Saved Addresses</p><p class="setting-sub">Home, Work, Favorites</p></div>
+              <svg width="8" height="14" viewBox="0 0 8 14"><path d="M1 1L7 7L1 13" stroke="#ccc" stroke-width="1.5" fill="none"/></svg>
+            </div>
+          </div>
+
+          <p class="section-lbl" style="margin-top:20px">PREFERENCES</p>
+          <div class="settings-list">
+            <div class="setting-item toggle-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" stroke="#333" stroke-width="1.8"/><path d="M6 1v3M10 1v3M14 1v3" stroke="#333" stroke-width="1.8" stroke-linecap="round"/></svg>
+              <div class="setting-info"><p class="setting-name">Push Notifications</p><p class="setting-sub">Booking updates, offers</p></div>
+              <div class="toggle on" onclick="togglePref(this)"><div class="toggle-knob"></div></div>
+            </div>
+            <div class="setting-item toggle-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#333" stroke-width="1.8"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" stroke="#333" stroke-width="1.8"/></svg>
+              <div class="setting-info"><p class="setting-name">Share Location</p><p class="setting-sub">For accurate pickup</p></div>
+              <div class="toggle on" onclick="togglePref(this)"><div class="toggle-knob"></div></div>
+            </div>
+            <div class="setting-item toggle-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" stroke="#333" stroke-width="1.8"/><path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="#333" stroke-width="1.8"/></svg>
+              <div class="setting-info"><p class="setting-name">Biometric Login</p><p class="setting-sub">Face ID / Fingerprint</p></div>
+              <div class="toggle" onclick="togglePref(this)"><div class="toggle-knob"></div></div>
+            </div>
+          </div>
+
+          <p class="section-lbl" style="margin-top:20px">SUPPORT</p>
+          <div class="settings-list">
+            <div class="setting-item" onclick="openSetting('help')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#333" stroke-width="1.8"/><path d="M9 9C9 7.34 10.34 6 12 6C13.66 6 15 7.34 15 9C15 10.66 12 12 12 12V14" stroke="#333" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="17" r="0.5" fill="#333" stroke="#333" stroke-width="1.5"/></svg>
+              <div class="setting-info"><p class="setting-name">Help &amp; Support</p><p class="setting-sub">FAQ, Chat, Call center</p></div>
+              <svg width="8" height="14" viewBox="0 0 8 14"><path d="M1 1L7 7L1 13" stroke="#ccc" stroke-width="1.5" fill="none"/></svg>
+            </div>
+            <div class="setting-item" onclick="openSetting('about')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#333" stroke-width="1.8"/><path d="M12 16v-4M12 8h.01" stroke="#333" stroke-width="1.8" stroke-linecap="round"/></svg>
+              <div class="setting-info"><p class="setting-name">About AIRRIDE</p><p class="setting-sub">Version 1.0.0</p></div>
+              <svg width="8" height="14" viewBox="0 0 8 14"><path d="M1 1L7 7L1 13" stroke="#ccc" stroke-width="1.5" fill="none"/></svg>
+            </div>
+          </div>
+
+          <button class="btn-logout" onclick="logout()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            LOG OUT
+          </button>
+          <div style="height:80px"></div>
+        </div>
+        <nav class="bottom-nav">
+          <button class="bnav-btn" onclick="nav('home')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3L21 9.5V20H15v-5H9v5H3V9.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            <span>Home</span>
+          </button>
+          <button class="bnav-btn" onclick="nav('history')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 9h8M8 13h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <span>Trips</span>
+          </button>
+          <button class="bnav-btn active">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <span>Profile</span>
+          </button>
+        </nav>
+      </div>
+
+    </div><!-- /screen-container -->
+  </div><!-- /phone-shell -->
+
+  <!-- Nav Dots -->
+  <div class="nav-strip">
+    <div class="nav-screens-label" id="nav-label">Splash Screen · 1/13</div>
+    <div class="nav-dots-row" id="nav-dots">
+      <button class="ndot active" title="Splash" onclick="nav('splash')"></button>
+      <button class="ndot" title="Login" onclick="nav('login')"></button>
+      <button class="ndot" title="OTP" onclick="nav('otp')"></button>
+      <button class="ndot" title="Home" onclick="nav('home')"></button>
+      <button class="ndot" title="Pickup" onclick="nav('pickup')"></button>
+      <button class="ndot" title="Destination" onclick="nav('destination')"></button>
+      <button class="ndot" title="Date & Time" onclick="nav('datetime')"></button>
+      <button class="ndot" title="Flight" onclick="nav('flight')"></button>
+      <button class="ndot" title="Fare" onclick="nav('fare')"></button>
+      <button class="ndot" title="Confirm" onclick="nav('confirm')"></button>
+      <button class="ndot" title="Tracking" onclick="nav('tracking')"></button>
+      <button class="ndot" title="History" onclick="nav('history')"></button>
+      <button class="ndot" title="Profile" onclick="nav('profile')"></button>
+    </div>
+  </div>
+</div><!-- /app -->
+
+<!-- SDK Web Dependencies -->
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-messaging-compat.js"></script>
+<script src="socket.io.min.js"></script>
+<!-- Supabase JS SDK removed: all real-time updates use Socket.IO -->
+<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzOlbBrVt1-xTovt3EWEw-YGkDi5hwUtU&libraries=places"></script> -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- Firebase Client Initialization & Configuration Settings -->
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCzOlbBrVt1-xTovt3EWEw-YGkDi5hwUtU",
+    authDomain: "airride-6f0b4.firebaseapp.com",
+    projectId: "airride-6f0b4",
+    storageBucket: "airride-6f0b4.firebasestorage.app",
+    messagingSenderId: "88057306071",
+    appId: "1:88057306071:web:3c4821a48d4a5ecfacc992",
+    measurementId: "G-PPZX971MQQ"
+  };
+  firebase.initializeApp(firebaseConfig);
+
+  window.AIRRIDE_CONFIG = {
+    API_BASE: 'http://localhost:3000/api',
+    WS_URL: 'http://localhost:3000',
+    GOOGLE_MAPS_KEY: 'AIzaSyCzOlbBrVt1-xTovt3EWEw-YGkDi5hwUtU',
+    MAP_PROVIDER: 'osm'
+  };
+</script>
+
+<script src="app.js"></script>
+</body>
+</html>
+

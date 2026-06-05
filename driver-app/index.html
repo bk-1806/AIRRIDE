@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AIRRIDE Driver – Airport Taxi Partner App</title>
+  <meta name="description" content="AIRRIDE Driver App – Manage your airport taxi rides, earnings, and schedule."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="driver-styles.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+<div id="driver-app">
+  <div class="phone-shell" id="phone-shell">
+
+    <!-- STATUS BAR -->
+    <div class="phone-status-bar" id="d-status-bar">
+      <span class="status-time" id="d-status-time">9:41</span>
+      <div class="status-icons">
+        <svg width="17" height="12" viewBox="0 0 17 12"><rect x="0" y="4" width="3" height="8" rx="1" fill="currentColor" opacity=".35"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="1" fill="currentColor" opacity=".6"/><rect x="9" y="0" width="3" height="12" rx="1" fill="currentColor"/></svg>
+        <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 2.5C10.2 2.5 12.2 3.4 13.6 4.9L15 3.4C13.2 1.5 10.7.5 8 .5 5.3.5 2.8 1.5 1 3.4L2.4 4.9C3.8 3.4 5.8 2.5 8 2.5Z" fill="currentColor"/><path d="M8 5.5C9.5 5.5 10.8 6.1 11.8 7L13.2 5.5C11.8 4.2 9.9 3.5 8 3.5 6.1 3.5 4.2 4.2 2.8 5.5L4.2 7C5.2 6.1 6.5 5.5 8 5.5Z" fill="currentColor"/><circle cx="8" cy="10" r="1.5" fill="currentColor"/></svg>
+        <svg width="26" height="13" viewBox="0 0 26 13"><rect x=".5" y=".5" width="22" height="12" rx="2.5" stroke="currentColor" stroke-opacity=".35"/><rect x="2" y="2" width="17" height="9" rx="1.5" fill="currentColor"/><path d="M24 4.5V8.5C24.9 8.1 25.5 7.1 25.5 6.5 25.5 5.9 24.9 4.9 24 4.5Z" fill="currentColor" opacity=".4"/></svg>
+      </div>
+    </div>
+    <!-- NOTCH -->
+    <div class="phone-notch"></div>
+
+    <!-- SCREEN CONTAINER -->
+    <div class="screen-container">
+
+      <!-- ═══════════════════════════════════════════
+           S1: SPLASH
+           ═══════════════════════════════════════════ -->
+      <div class="screen active" id="ds-splash">
+        <div class="d-splash-wrap">
+          <div class="d-splash-logo-box">
+            <svg class="d-splash-plane" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5C13 2.67 12.33 2 11.5 2S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" fill="white"/></svg>
+            <span class="d-splash-lbl">DRIVER</span>
+          </div>
+          <h1 class="d-splash-title">AIRRIDE</h1>
+          <p class="d-splash-sub">PARTNER DRIVER APP</p>
+          <div class="d-splash-bar"><div class="d-splash-fill" id="d-splash-fill"></div></div>
+          <p class="d-splash-loading">INITIALIZING...</p>
+          <div class="d-splash-ft">
+            <p class="d-splash-ver">DRIVER APP v1.0.0</p>
+            <p class="d-splash-copy">© 2024 AIRRIDE INC. ALL RIGHTS RESERVED.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════
+           S2: LOGIN
+           ═══════════════════════════════════════════ -->
+      <div class="screen" id="ds-login">
+        <div class="d-login-top">
+          <div class="d-login-brand">
+            <div class="d-brand-icon">
+              <svg viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5C13 2.67 12.33 2 11.5 2S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" fill="white"/></svg>
+            </div>
+            <div>
+              <p class="d-brand-name">AIRRIDE</p>
+              <p class="d-brand-sub">DRIVER PARTNER</p>
+            </div>
+          </div>
+          <div class="d-login-driver-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#555" stroke-width="1.8"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#555" stroke-width="1.8" stroke-linecap="round"/><path d="M16 3l2 2-5 5-2-2 5-5z" stroke="#555" stroke-width="1.5" fill="none"/></svg>
+            <span>Driver Login</span>
+          </div>
+        </div>
+        <div class="d-login-body">
+          <h2 class="d-page-title">WELCOME, DRIVER</h2>
+          <p class="d-page-sub">Enter your registered mobile number to continue.</p>
+          <div class="d-fg">
+            <label class="d-flabel">MOBILE NUMBER</label>
+            <div class="d-phone-row">
+              <div class="d-cc"><span>🇺🇸</span><span class="d-cc-val">+1</span>
+                <svg width="10" height="6"><path d="M1 1L5 5L9 1" stroke="#666" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
+              </div>
+              <input type="tel" id="d-phone-input" class="d-phone-num" placeholder="555 000 0000" autocomplete="tel"/>
+            </div>
+            <p class="d-fhint">Your number must be registered as an AIRRIDE driver partner.</p>
+          </div>
+          <button class="d-btn-blk" id="d-send-otp-btn">SEND OTP →</button>
+          <div class="d-divider"><span>OR</span></div>
+          <button class="d-btn-out" id="d-google-btn">
+            <svg width="18" height="18" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908C18.622 14.015 17.64 11.707 17.64 9.2z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/><path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
+            CONTINUE WITH GOOGLE
+          </button>
+          <div class="d-login-ft">
+            <p>Not a driver yet? <a href="#" class="d-lnk">Apply to drive</a></p>
+            <p class="d-tiny">By continuing, you agree to our <a href="#" class="d-lnk">Terms</a> &amp; <a href="#" class="d-lnk">Privacy Policy</a></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════
+           S3: OTP
+           ═══════════════════════════════════════════ -->
+      <div class="screen" id="ds-otp">
+        <div class="d-inner">
+          <div class="d-page-hdr">
+            <button class="d-back-btn" onclick="dNav('login')">
+              <svg width="16" height="16"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
+              VERIFY NUMBER
+            </button>
+          </div>
+          <div class="d-otp-body">
+            <div class="d-otp-ring">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="#333" stroke-width="1.5"/><path d="M2 7L12 13L22 7" stroke="#333" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </div>
+            <h2 class="d-page-title">ENTER OTP</h2>
+            <p class="d-page-sub">We sent a 6-digit code to</p>
+            <p class="d-otp-phone" id="d-otp-phone">+1 (555) 000-0000</p>
+            <a href="#" class="d-lnk d-tiny-lnk" onclick="dNav('login');return false;">Change number</a>
+            <div class="d-otp-grid" id="d-otp-grid">
+              <input type="text" class="d-otp-cell" maxlength="1" inputmode="numeric"/>
+              <input type="text" class="d-otp-cell" maxlength="1" inputmode="numeric"/>
+              <input type="text" class="d-otp-cell" maxlength="1" inputmode="numeric"/>
+              <input type="text" class="d-otp-cell" maxlength="1" inputmode="numeric"/>
+              <input type="text" class="d-otp-cell" maxlength="1" inputmode="numeric"/>
+              <input type="text" class="d-otp-cell" maxlength="1" inputmode="numeric"/>
+            </div>
+            <p class="d-resend-hint">Didn't receive the code?</p>
+            <p class="d-resend-timer">Resend OTP in <strong id="d-otp-timer">0:42</strong></p>
+            <button class="d-btn-blk" id="d-verify-btn">VERIFY &amp; CONTINUE →</button>
+            <button class="d-btn-out" id="d-resend-btn" style="opacity:.5" disabled>RESEND OTP</button>
+            <div class="d-security-note">
+              <svg width="12" height="14" viewBox="0 0 12 14"><rect x="1" y="5" width="10" height="8" rx="1.5" stroke="#888" stroke-width="1.2" fill="none"/><path d="M3.5 5V3.5C3.5 2.12 4.62 1 6 1 7.38 1 8.5 2.12 8.5 3.5V5" stroke="#888" stroke-width="1.2" stroke-linecap="round" fill="none"/></svg>
+              <span>Your OTP is valid for 5 minutes. AIRRIDE will never ask for your OTP.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════
+           S4: DASHBOARD / HOME
+           ═══════════════════════════════════════════ -->
+      <div class="screen" id="ds-home">
+        <div class="d-home-wrap">
+          <!-- Top greeting -->
+          <div class="d-home-top">
+            <div>
+              <p class="d-greeting-sm" id="d-greeting">GOOD MORNING,</p>
+              <h2 class="d-greeting-name"><span id="d-greeting-name">Michael</span> <span class="d-caret">›</span></h2>
+            </div>
+            <div class="d-notif-btn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <div class="d-notif-badge" id="d-notif-badge">2</div>
+            </div>
+          </div>
+
+          <!-- Online/Offline Card -->
+          <div class="d-status-card" id="d-status-card">
+            <div class="d-online-row">
+              <div class="d-status-indicator" id="d-status-indicator">
+                <div class="d-status-dot" id="d-status-dot"></div>
+                <span class="d-status-text" id="d-status-text">OFFLINE</span>
+              </div>
+              <button class="d-toggle" id="d-toggle-btn" onclick="toggleOnlineStatus()" role="switch" aria-checked="false">
+                <div class="d-toggle-knob"></div>
+              </button>
+            </div>
+            <div class="d-stats-row">
+              <div class="d-stat">
+                <p class="d-stat-label">TODAY</p>
+                <p class="d-stat-val" id="d-earn-today">$185.5</p>
+              </div>
+              <div class="d-stat-div"></div>
+              <div class="d-stat">
+                <p class="d-stat-label">RATING</p>
+                <p class="d-stat-val">4.8</p>
+              </div>
+              <div class="d-stat-div"></div>
+              <div class="d-stat">
+                <p class="d-stat-label">RIDES</p>
+                <p class="d-stat-val" id="d-rides-today">12</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accept Ride CTA -->
+          <div class="d-accept-cta" id="d-accept-cta" onclick="handleAcceptCTA()">
+            <p class="d-cta-title">TAP TO ACCEPT A RIDE</p>
+            <p class="d-cta-sub">Or swipe up to see requests</p>
+          </div>
+
+          <!-- Incoming Request Banner (hidden by default) -->
+          <div class="d-incoming-banner" id="d-incoming-banner" style="display:none" onclick="dNav('request')">
+            <div class="d-incoming-pulse"></div>
+            <div class="d-incoming-text">
+              <p class="d-incoming-title">NEW RIDE REQUEST!</p>
+              <p class="d-incoming-sub">Passenger nearby · Tap to view</p>
+            </div>
+            <div class="d-incoming-timer" id="d-banner-timer">30</div>
+          </div>
+
+          <!-- Nearby Airport -->
+          <div class="d-section-card">
+            <div class="d-card-row gap10">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="10" r="3" stroke="#555" stroke-width="1.5"/><path d="M12 2C7.58 2 4 5.58 4 10c0 5.25 8 12 8 12s8-6.75 8-12c0-4.42-3.58-8-8-8z" stroke="#555" stroke-width="1.5" fill="none"/></svg>
+              <p class="d-card-label">NEARBY AIRPORT</p>
+            </div>
+            <p class="d-airport-name">John F. Kennedy Intl.</p>
+            <p class="d-airport-meta">18.4 mi away • Terminal T4</p>
+          </div>
+
+          <!-- Airport Queue Status -->
+          <div class="d-section-card">
+            <p class="d-card-label">AIRPORT QUEUE STATUS</p>
+            <div class="d-queue-row">
+              <div>
+                <p class="d-queue-status" id="d-queue-status">Light Queue</p>
+                <p class="d-queue-wait" id="d-queue-wait">~5 min wait time</p>
+              </div>
+              <div class="d-queue-right">
+                <p class="d-queue-many">Many drivers</p>
+                <p class="d-queue-count" id="d-queue-count">24 in queue</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Performance Stats -->
+          <div class="d-perf-grid">
+            <div class="d-perf-card">
+              <p class="d-perf-label">ACCEPT</p>
+              <p class="d-perf-val" id="d-accept-rate">98%</p>
+            </div>
+            <div class="d-perf-card">
+              <p class="d-perf-label">ON-TIME</p>
+              <p class="d-perf-val" id="d-ontime-rate">99%</p>
+            </div>
+            <div class="d-perf-card">
+              <p class="d-perf-label">CANCEL</p>
+              <p class="d-perf-val cancel-val" id="d-cancel-rate">2%</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Nav -->
+        <nav class="d-bottom-nav">
+          <button class="d-bnav active" id="d-bnav-home" onclick="dNav('home')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3L21 9.5V20H15v-5H9v5H3V9.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            <span>Home</span>
+          </button>
+          <button class="d-bnav" id="d-bnav-trips" onclick="dNav('trips')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 9h8M8 13h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <span>Trips</span>
+          </button>
+          <button class="d-bnav" id="d-bnav-earnings" onclick="dNav('earnings')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><polyline points="17 6 23 6 23 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Earnings</span>
+          </button>
+          <button class="d-bnav" id="d-bnav-profile" onclick="dNav('profile')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <span>Profile</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- ═══════════════════════════════════════════
+           S5: RIDE REQUEST
+           ═══════════════════════════════════════════ -->
+      <div class="screen" id="ds-request">
+        <div class="d-request-wrap">
+          <!-- Countdown ring -->
+          <div class="d-countdown-zone">
+            <div class="d-countdown-ring">
+              <svg class="d-ring-svg" viewBox="0 0 80 80">
+                <circle cx="40" cy="40" r="34" fill="none" stroke="#e8e8e8" stroke-width="5"/>
+                <circle cx="40" cy="40" r="34" fill="none" stroke="#0a0a0a" stroke-width="5"
+                  stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="0"
+                  id="d-ring-progress" style="transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset 1s linear"/>
+              </svg>
+              <div class="d-countdown-inner">
+                <p class="d-countdown-num" id="d-countdown-num">30</p>
+                <p class="d-countdown-lbl">SEC</p>
+              </div>
+            </div>
+            <p class="d-new-request-lbl">NEW RIDE REQUEST</p>
+          </div>
+
+          <!-- Passenger info -->
+          <div class="d-passenger-card">
+            <div class="d-pass-header">
+              <div class="d-pass-ava" id="d-pass-ava">JS</div>
+              <div class="d-pass-info">
+                <p class="d-pass-name" id="d-pass-name">John Smith</p>
+                <div class="d-pass-rating">
+                  <svg width="12" height="12" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#f59e0b"/></svg>
+                  <span id="d-pass-rating">4.9</span>
+                  <span class="d-pass-rides" id="d-pass-rides">· 24 rides</span>
+                </div>
+              </div>
+              <div class="d-payout-badge">
+                <p class="d-payout-label">PAYOUT</p>
+                <p class="d-payout-val" id="d-payout-val">$38.50</p>
+              </div>
+            </div>
+
+            <div class="d-route-card">
+              <div class="d-route-point">
+                <div class="d-rp-dot blk"></div>
+                <div>
+                  <p class="d-rp-label">PICKUP</p>
+                  <p class="d-rp-addr" id="d-req-pickup">78 Maple Avenue, Brooklyn, NY</p>
+                </div>
+              </div>
+              <div class="d-route-line"></div>
+              <div class="d-route-point">
+                <div class="d-rp-dot wht"></div>
+                <div>
+                  <p class="d-rp-label">DESTINATION</p>
+                  <p class="d-rp-addr" id="d-req-dest">JFK T4 – American Airlines</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-req-meta">
+              <div class="d-meta-chip">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M21 16v-2l-8-5V3.5C13 2.67 12.33 2 11.5 2S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" fill="#555"/></svg>
+                <span id="d-req-flight">AA 123</span>
+              </div>
+              <div class="d-meta-chip">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#555" stroke-width="1.5"/><path d="M12 7v5l3 3" stroke="#555" stroke-width="1.5" stroke-linecap="round"/></svg>
+                <span id="d-req-eta">42 min ETA</span>
+              </div>
+              <div class="d-meta-chip">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M3 12h18M3 12l4-4M3 12l4 4" stroke="#555" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
+                <span id="d-req-dist">18 mi</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action buttons -->
+          <div class="d-request-actions">
+            <button class="d-btn-decline" id="d-decline-btn" onclick="declineRide()">DECLINE</button>
+            <button class="d-btn-accept" id="d-accept-btn" onclick="acceptRide()">ACCEPT RIDE</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════
+           S6: TRIP DETAILS (after accepting)
+           ═══════════════════════════════════════════ -->
+      <div class="screen" id="ds-tripdetail">
+        <div class="d-inner">
+          <div class="d-page-hdr">
+            <button class="d-back-btn" onclick="dNav('home')">
+              <svg width="16" height="16"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
+              TRIP DETAILS
+            </button>
+            <div class="d-trip-badge">ACCEPTED</div>
+          </div>
+          <!-- Passenger block -->
+          <div class="d-td-passenger">
+            <div class="d-pass-ava lg" id="d-td-ava">JS</div>
+            <div class="d-td-pass-info">
+              <p class="d-td-name" id="d-td-name">John Smith</p>
+              <div class="d-pass-rating">
+                <svg width="12" height="12" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#f59e0b"/></svg>
+                <span id="d-td-rating">4.9 stars</span>
+              </div>
+            </div>
+            <div class="d-td-contact">
+              <button class="d-contact-btn" onclick="callPassenger()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6.6 10.8C7.8 13.2 9.8 15.2 12.2 16.4L14.2 14.4C14.5 14.1 14.9 14 15.3 14.2 16.5 14.6 17.8 14.8 19 14.8c.6 0 1 .4 1 1V19c0 .6-.4 1-1 1C10.2 20 3 12.8 3 4c0-.6.4-1 1-1H7.5c.6 0 1 .4 1 1 0 1.2.2 2.5.6 3.7.1.4 0 .8-.3 1.1L6.6 10.8z" fill="#333"/></svg>
+              </button>
+              <button class="d-contact-btn" onclick="msgPassenger()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M20 2H4C2.9 2 2 2.9 2 4V16C2 17.1 2.9 18 4 18H8L12 22L16 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2Z" stroke="#333" stroke-width="1.8" fill="none"/><path d="M8 10h8M8 7h8M8 13h4" stroke="#333" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Route -->
+          <div class="d-td-route">
+            <div class="d-route-point">
+              <div class="d-rp-dot blk"></div>
+              <div><p class="d-rp-label">PICKUP</p><p class="d-rp-addr" id="d-td-pickup">78 Maple Avenue, Brooklyn, NY</p></div>
+            </div>
+            <div class="d-route-line"></div>
+            <div class="d-route-point">
+              <div class="d-rp-dot wht"></div>
+              <div><p class="d-rp-label">DESTINATION</p><p class="d-rp-addr" id="d-td-dest">JFK T4 – American Airlines</p></div>
+            </div>
+          </div>
+
+          <!-- Flight info -->
+          <div class="d-td-flight-card">
+            <div class="d-flight-header">
+              <svg width="14" height="14" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5C13 2.67 12.33 2 11.5 2S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" fill="white"/></svg>
+              <span>FLIGHT INFORMATION</span>
+              <span class="d-status-badge on-time" id="d-td-flight-status">ON TIME</span>
+            </div>
+            <div class="d-flight-body">
+              <div class="d-flight-item"><p class="d-fi-label">FLIGHT</p><p class="d-fi-val" id="d-td-flight">AA 123</p></div>
+              <div class="d-flight-item"><p class="d-fi-label">TERMINAL</p><p class="d-fi-val" id="d-td-terminal">T4</p></div>
+              <div class="d-flight-item"><p class="d-fi-label">ARRIVES</p><p class="d-fi-val" id="d-td-arrives">7:45 PM</p></div>
+            </div>
+          </div>
+
+          <!-- Fare breakdown -->
+          <div class="d-section-card mx20">
+            <p class="d-card-label">FARE BREAKDOWN</p>
+            <div class="d-fare-row"><span>Base fare</span><span>$30.00</span></div>
+            <div class="d-fare-row"><span>Distance (18 mi)</span><span>$9.00</span></div>
+            <div class="d-fare-row"><span>Airport surcharge</span><span>$3.00</span></div>
+            <div class="d-fare-div"></div>
+            <div class="d-fare-row"><span>Passenger total</span><span>$42.00</span></div>
+            <div class="d-fare-row highlight"><span>YOUR PAYOUT</span><span id="d-td-payout">$38.50</span></div>
+          </div>
+          <div style="height:100px"></div>
+        </div>
+        <div class="d-sticky-bottom">
+          <button class="d-btn-blk" onclick="startNavigation()">START NAVIGATION →</button>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════
+           S7: NAVIGATING TO PASSENGER
+           ═══════════════════════════════════════════ -->
+      <div class="screen" id="ds-navigating">
+        <div class="d-nav-map">
+          <div class="d-map-ph" id="d-navigating-map">
+            <div class="d-map-grid"></div>
+            <div class="d-nav-car" id="d-nav-car">🚗</div>
+            <div class="d-pickup-pin">
+              <svg width="20" height="24" viewBox="0 0 20 24" fill="none"><path d="M10 0C4.48 0 0 4.48 0 10 0 17.5 10 24 10 24 10 24 20 17.5 20 10 20 4.48 15.52 0 10 0Z" fill="#0a0a0a"/><circle cx="10" cy="10" r="4" fill="white"/></svg>
+            </div>
+            <span class="d-map-lbl">GPS NAVIGATION</span>
+          </div>
+          <div class="d-nav-top-bar">
+            <button class="d-top-back" onclick="dNav('tripdetail')">
+              <svg width="16" height="16"><path d="M10 3L5 8L10 13" stroke="white" stroke-width="1.5" fill="none"/></svg>
+            </button>
+            <div class="d-eta-card">
+              <p class="d-eta-num" id="d-nav-eta">8 MIN</p>
+              <p class="d-eta-label">TO PICKUP</p>
+            </div>
+            <div class="d-dist-card">
+              <p class="d-dist-num" id="d-nav-dist">2.4 MI</p>
+              <p class="d-dist-label">AWAY</p>
+            </div>
+          </div>
+        </div>
+        <div class="d-nav-sheet">
+          <div class="d-sheet-handle"></div>
+          <div class="d-nav-passenger-row">
+            <div class="d-pass-ava" id="d-nav-ava">JS</div>
+            <div class="d-nav-pass-info">
+              <p class="d-nav-name" id="d-nav-name">John Smith</p>
+              <p class="d-nav-status" id="d-nav-status">Waiting at pickup location</p>
+              <p class="d-nav-addr" id="d-nav-addr">78 Maple Ave, Brooklyn</p>
+            </div>
+            <div class="d-nav-actions">
+              <button class="d-nav-btn" onclick="callPassenger()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6.6 10.8C7.8 13.2 9.8 15.2 12.2 16.4L14.2 14.4c.3-.3.7-.4 1.1-.2C16.5 14.6 17.8 14.8 19 14.8c.6 0 1 .4 1 1V19c0 .6-.4 1-1 1C10.2 20 3 12.8 3 4c0-.6.4-1 1-1H7.5c.6 0 1 .4 1 1 0 1.2.2 2.5.6 3.7.1.4 0 .8-.3 1.1L6.6 10.8z" fill="#333"/></svg>
+              </button>
+              <button class="d-nav-btn" onclick="msgPassenger()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 2H4C2.9 2 2 2.9 2 4V16c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2Z" stroke="#333" stroke-width="1.8" fill="none"/></svg>
+              </button>
+            </div>
+          </div>
+          <button class="d-btn-blk arrived-btn" onclick="markArrived()">I'VE ARRIVED ✓</button>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════
+           S8: AIRPORT PICKUP / WAITING
+           ═══════════════════════════════════════════ -->
+      <div class="screen" id="ds-waiting">
+        <div class="d-inner">
+          <div class="d-page-hdr">
+            <button class="d-back-btn" onclick="dNav('navigating')">
+              <svg width="16" height="16"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
+              WAITING FOR PASSENGER
+            </button>
+          </div>
+          <div class="d-waiting-body">
+            <!-- Flight status -->
+            <div class="d-flight-tracker">
+              <div class="d-ft-header">
+                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5C13 2.67 12.33 2 11.5 2S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" fill="white"/></svg>
+                <span>FLIGHT TRACKER</span>
+              </div>
+              <div class="d-ft-body">
+                <div class="d-ft-row">
+                  <div class="d-ft-city">
+                    <p class="d-ft-iata" id="d-ft-from">LAX</p>
+                    <p class="d-ft-name">Los Angeles</p>
+                  </div>
+                  <div class="d-ft-mid">
+                    <svg width="50" height="16" viewBox="0 0 50 16"><path d="M4 8h42M38 4l8 4-8 4" stroke="white" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
+                    <p class="d-ft-flight-num" id="d-ft-num">AA 123</p>
+                  </div>
+                  <div class="d-ft-city">
+                    <p class="d-ft-iata" id="d-ft-to">JFK</p>
+                    <p class="d-ft-name">New York</p>
+                  </div>
+                </div>
+                <div class="d-ft-status-row">
+                  <div class="d-ft-status-item"><p class="d-ft-label">STATUS</p><p class="d-ft-val green" id="d-ft-status">LANDED</p></div>
+                  <div class="d-ft-status-item"><p class="d-ft-label">GATE</p><p class="d-ft-val" id="d-ft-gate">B22</p></div>
+                  <div class="d-ft-status-item"><p class="d-ft-label">BAGGAGE</p><p class="d-ft-val" id="d-ft-bag">Belt 7</p></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Passenger status steps -->
+            <div class="d-section-card mx20">
+              <p class="d-card-label">PASSENGER STATUS</p>
+              <div class="d-step-list">
+                <div class="d-step done" id="dstep-landed">
+                  <div class="d-step-icon">✓</div>
+                  <div><p class="d-step-title">Flight Landed</p><p class="d-step-sub">7:45 PM · On time</p></div>
+                </div>
+                <div class="d-step-line done"></div>
+                <div class="d-step done" id="dstep-baggage">
+                  <div class="d-step-icon">✓</div>
+                  <div><p class="d-step-title">At Baggage Claim</p><p class="d-step-sub">Belt 7 · Terminal T4</p></div>
+                </div>
+                <div class="d-step-line active"></div>
+                <div class="d-step active" id="dstep-heading">
+                  <div class="d-step-icon pulse-step"></div>
+                  <div><p class="d-step-title">Heading to Pickup</p><p class="d-step-sub">~5 min away</p></div>
+                </div>
+                <div class="d-step-line"></div>
+                <div class="d-step" id="dstep-onboard">
+                  <div class="d-step-icon empty-step"></div>
+                  <div><p class="d-step-title">Passenger Onboard</p><p class="d-step-sub">Confirm when seated</p></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Terminal info -->
+            <div class="d-section-card mx20">
+              <p class="d-card-label">PICKUP INSTRUCTIONS</p>
+              <div class="d-pickup-info">
+                <div class="d-pi-row">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="10" r="3" stroke="#555" stroke-width="1.5"/><path d="M12 2C7.58 2 4 5.58 4 10c0 5.25 8 12 8 12s8-6.75 8-12c0-4.42-3.58-8-8-8z" stroke="#555" stroke-width="1.5" fill="none"/></svg>
+                  <span>Terminal T4 – Arrivals Level 1</span>
+                </div>
+                <div class="d-pi-row">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="#555" stroke-width="1.5"/><path d="M8 9h8M8 13h5" stroke="#555" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  <span>Passenger holding: JOHN SMITH sign</span>
+                </div>
+                <div class="d-pi-row">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#555" stroke-width="1.5"/><path d="M12 7v5l3 3" stroke="#555" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  <span>Free waiting: 15 min from landing</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="d-sticky-bottom">
+          <button class="d-btn-blk" onclick="passengerOnboard()">PASSENGER ONBOARD →</button>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════
+           S9: ACTIVE TRIP
+           ═══════════════════════════════════════════ -->
+      <div class="screen" id="ds-activetrip">
+        <div class="d-trip-map">
+          <div class="d-map-ph" id="d-activetrip-map">
+            <div class="d-map-grid"></div>
+            <div class="d-trip-car">🚗</div>
+            <div class="d-trip-dest-pin">
+              <svg width="20" height="24" viewBox="0 0 20 24" fill="none"><path d="M10 0C4.48 0 0 4.48 0 10 0 17.5 10 24 10 24 10 24 20 17.5 20 10 20 4.48 15.52 0 10 0Z" fill="#0a0a0a"/><circle cx="10" cy="10" r="4" fill="white"/></svg>
+            </div>
+            <span class="d-map-lbl">ACTIVE TRIP</span>
+          </div>
+          <div class="d-trip-top-bar">
+            <div class="d-trip-status-pill">
+              <div class="d-status-dot online small"></div>
+              <span>TRIP IN PROGRESS</span>
+            </div>
+            <div class="d-trip-eta-box">
+              <p class="d-eta-num" id="d-trip-eta">22 MIN</p>
+              <p class="d-eta-label">TO DEST</p>
+            </div>
+          </div>
+        </div>
+        <div class="d-trip-sheet">
+          <div class="d-sheet-handle"></div>
+          <div class="d-active-passenger">
+            <div class="d-pass-ava sm" id="d-at-ava">JS</div>
+            <div class="d-at-info">
+              <p class="d-at-name" id="d-at-name">John Smith</p>
+              <p class="d-at-dest" id="d-at-dest">→ JFK T4 · 18 mi remaining</p>
+            </div>
+            <div class="d-at-actions">
+              <button class="d-nav-btn" onclick="callPassenger()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6.6 10.8C7.8 13.2 9.8 15.2 12.2 16.4L14.2 14.4c.3-.3.7-.4 1.1-.2C16.5 14.6 17.8 14.8 19 14.8c.6 0 1 .4 1 1V19c0 .6-.4 1-1 1C10.2 20 3 12.8 3 4c0-.6.4-1 1-1H7.5c.6 0 1 .4 1 1 0 1.2.2 2.5.6 3.7.1.4 0 .8-.3 1.1L6.6 10.8z" fill="#333"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="d-trip-progress-bar">
+            <div class="d-trip-fill" id="d-trip-fill" style="width:35%"></div>
+          </div>
+          <div class="d-trip-stats">
+            <div class="d-tstat"><p class="d-tstat-label">DISTANCE</p><p class="d-tstat-val" id="d-trip-dist">12.4 mi</p></div>
+            <div class="d-tstat-div"></div>
+            <div class="d-tstat"><p class="d-tstat-label">DURATION</p><p class="d-tstat-val" id="d-trip-dur">22 min</p></div>
+            <div class="d-tstat-div"></div>
+            <div class="d-tstat"><p class="d-tstat-label">PAYOUT</p><p class="d-tstat-val" id="d-trip-payout">$38.50</p></div>
+          </div>
+          <button class="d-btn-complete" onclick="completeTrip()">COMPLETE RIDE ✓</button>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════
+           S10: TRIP COMPLETION
+           ═══════════════════════════════════════════ -->
+      <div class="screen" id="ds-completion">
+        <div class="d-inner" style="align-items:center;padding:32px 20px">
+          <div class="d-complete-circle">
+            <svg width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" stroke="#0a0a0a" stroke-width="1.5" fill="none"/><path d="M11 20l7 7 11-14" stroke="#0a0a0a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+          </div>
+          <h2 class="d-complete-title">TRIP COMPLETED!</h2>
+          <p class="d-complete-sub">Great job, Michael! Here's your summary.</p>
+
+          <div class="d-trip-summary-card">
+            <div class="d-ts-header">
+              <p class="d-ts-trip-id" id="d-ts-id">Trip #ARR-001</p>
+              <p class="d-ts-date" id="d-ts-date">Jun 4, 2024 · 7:48 PM</p>
+            </div>
+            <div class="d-ts-route">
+              <div class="d-route-point"><div class="d-rp-dot blk"></div><p class="d-rp-addr" id="d-ts-from">78 Maple Ave, Brooklyn</p></div>
+              <div class="d-route-line"></div>
+              <div class="d-route-point"><div class="d-rp-dot wht"></div><p class="d-rp-addr" id="d-ts-to">JFK T4 – American Airlines</p></div>
+            </div>
+            <div class="d-ts-stats">
+              <div class="d-tss"><p class="d-tss-label">DISTANCE</p><p class="d-tss-val">18 mi</p></div>
+              <div class="d-tss"><p class="d-tss-label">DURATION</p><p class="d-tss-val">42 min</p></div>
+              <div class="d-tss"><p class="d-tss-label">PASSENGER</p><p class="d-tss-val" id="d-ts-pass">John S.</p></div>
+            </div>
+            <div class="d-ts-payout-row">
+              <span>YOUR EARNINGS</span>
+              <span class="d-ts-payout" id="d-ts-payout">$38.50</span>
+            </div>
+          </div>
+
+          <!-- Rate passenger -->
+          <div class="d-rate-section">
+            <p class="d-rate-label">RATE YOUR PASSENGER</p>
+            <div class="d-stars" id="d-stars">
+              <span class="d-star active" data-val="1">★</span>
+              <span class="d-star active" data-val="2">★</span>
+              <span class="d-star active" data-val="3">★</span>
+              <span class="d-star active" data-val="4">★</span>
+              <span class="d-star active" data-val="5">★</span>
+            </div>
+          </div>
+          <button class="d-btn-blk" onclick="finishTrip()">DONE – GO ONLINE →</button>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════
+           S11: MY TRIPS
+           ═══════════════════════════════════════════ -->
+      <div class="screen" id="ds-trips">
+        <div class="d-inner">
+          <div class="d-page-hdr plain">
+            <h2 class="d-page-title-lg">My Trips</h2>
+          </div>
+          <div class="d-trip-filter-row">
+            <button class="d-filter-btn active" onclick="filterTrips('all',this)">All</button>
+            <button class="d-filter-btn" onclick="filterTrips('completed',this)">Completed</button>
+            <button class="d-filter-btn" onclick="filterTrips('cancelled',this)">Cancelled</button>
+          </div>
+          <div class="d-trips-list" id="d-trips-list"></div>
+        </div>
+        <nav class="d-bottom-nav">
+          <button class="d-bnav" onclick="dNav('home')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3L21 9.5V20H15v-5H9v5H3V9.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>Home</span>
+          </button>
+          <button class="d-bnav active">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 9h8M8 13h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Trips</span>
+          </button>
+          <button class="d-bnav" onclick="dNav('earnings')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Earnings</span>
+          </button>
+          <button class="d-bnav" onclick="dNav('profile')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Profile</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- ═══════════════════════════════════════════
+           S12: EARNINGS
+           ═══════════════════════════════════════════ -->
+      <div class="screen" id="ds-earnings">
+        <div class="d-inner scroll">
+          <div class="d-page-hdr plain">
+            <h2 class="d-page-title-lg">Earnings</h2>
+          </div>
+
+          <!-- Earn cards -->
+          <div class="d-earn-cards">
+            <div class="d-earn-card black">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+              <p class="d-ec-period">TODAY</p>
+              <p class="d-ec-amount" id="d-ec-today">$185.5</p>
+            </div>
+            <div class="d-earn-card">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18" stroke="#555" stroke-width="2" stroke-linecap="round"/></svg>
+              <p class="d-ec-period">THIS WEEK</p>
+              <p class="d-ec-amount" id="d-ec-week">$1240.75</p>
+            </div>
+            <div class="d-earn-card">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18" stroke="#555" stroke-width="2" stroke-linecap="round"/></svg>
+              <p class="d-ec-period">THIS MONTH</p>
+              <p class="d-ec-amount" id="d-ec-month">$5320</p>
+            </div>
+          </div>
+
+          <!-- Recent Payouts -->
+          <p class="d-section-lbl" style="padding:0 20px;margin-bottom:10px">RECENT PAYOUTS</p>
+          <div class="d-payout-list" id="d-payout-list"></div>
+
+          <!-- Total earned -->
+          <div class="d-total-earn-card">
+            <p class="d-te-label">TOTAL EARNED</p>
+            <p class="d-te-amount" id="d-te-total">$6746.25</p>
+            <p class="d-te-sub">All-time earnings since joining AirRide</p>
+          </div>
+
+          <!-- Commission breakdown -->
+          <div class="d-section-card mx20" style="margin-top:16px">
+            <p class="d-card-label">COMMISSION BREAKDOWN</p>
+            <div class="d-fare-row"><span>Gross fare collected</span><span>$185.50</span></div>
+            <div class="d-fare-row"><span>AirRide commission (8%)</span><span>-$14.84</span></div>
+            <div class="d-fare-row"><span>Airport surcharge</span><span>$12.00</span></div>
+            <div class="d-fare-div"></div>
+            <div class="d-fare-row highlight"><span>NET PAYOUT (TODAY)</span><span>$182.66</span></div>
+          </div>
+          <div style="height:90px"></div>
+        </div>
+        <nav class="d-bottom-nav">
+          <button class="d-bnav" onclick="dNav('home')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3L21 9.5V20H15v-5H9v5H3V9.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>Home</span>
+          </button>
+          <button class="d-bnav" onclick="dNav('trips')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 9h8M8 13h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Trips</span>
+          </button>
+          <button class="d-bnav active">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Earnings</span>
+          </button>
+          <button class="d-bnav" onclick="dNav('profile')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Profile</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- ═══════════════════════════════════════════
+           S13: PROFILE
+           ═══════════════════════════════════════════ -->
+      <div class="screen" id="ds-profile">
+        <div class="d-inner scroll">
+          <div class="d-page-hdr plain">
+            <h2 class="d-page-title-lg">Profile</h2>
+          </div>
+
+          <!-- Avatar + name -->
+          <div class="d-profile-hero">
+            <div class="d-profile-ava-wrap">
+              <div class="d-profile-ava" id="d-profile-ava">MR</div>
+              <button class="d-ava-edit" onclick="dShowToast('Photo upload coming soon')">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M18.5 2.5L21.5 5.5 12 15H9V12L18.5 2.5Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+            <p class="d-profile-name" id="d-profile-name">Michael R.</p>
+            <a href="#" class="d-profile-edit-lnk" onclick="editProfile();return false;">EDIT</a>
+          </div>
+
+          <!-- Contact info -->
+          <div class="d-profile-section">
+            <div class="d-profile-field">
+              <div class="d-pf-row">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6.6 10.8C7.8 13.2 9.8 15.2 12.2 16.4L14.2 14.4c.3-.3.7-.4 1.1-.2 1.2.4 2.5.6 3.7.6.6 0 1 .4 1 1V19c0 .6-.4 1-1 1C10.2 20 3 12.8 3 4c0-.6.4-1 1-1H7.5c.6 0 1 .4 1 1 0 1.2.2 2.5.6 3.7.1.4 0 .8-.3 1.1L6.6 10.8z" stroke="#555" stroke-width="1.5" fill="none"/></svg>
+                <div><p class="d-pf-label">PHONE NUMBER</p><p class="d-pf-val" id="d-pf-phone">+1 (555) 000-0000</p></div>
+              </div>
+            </div>
+            <div class="d-profile-field">
+              <div class="d-pf-row">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="#555" stroke-width="1.5"/><path d="M2 7L12 13L22 7" stroke="#555" stroke-width="1.5" stroke-linecap="round"/></svg>
+                <div><p class="d-pf-label">EMAIL</p><p class="d-pf-val" id="d-pf-email">michael@example.com</p></div>
+              </div>
+            </div>
+          </div>
+
+          <p class="d-section-lbl" style="padding:0 20px;margin-top:20px;margin-bottom:10px">VEHICLE INFORMATION</p>
+          <div class="d-profile-section">
+            <div class="d-profile-field">
+              <div class="d-pf-row">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="2" y="8" width="20" height="10" rx="2" stroke="#555" stroke-width="1.5"/><path d="M5 8V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v2" stroke="#555" stroke-width="1.5"/><circle cx="7" cy="18" r="2" fill="#555"/><circle cx="17" cy="18" r="2" fill="#555"/></svg>
+                <div><p class="d-pf-label">VEHICLE</p><p class="d-pf-val" id="d-pf-vehicle">White Toyota Camry</p></div>
+              </div>
+            </div>
+            <div class="d-profile-field">
+              <div class="d-pf-row">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="2" y="5" width="20" height="14" rx="2" stroke="#555" stroke-width="1.5"/><path d="M8 12h8M8 9h3" stroke="#555" stroke-width="1.5" stroke-linecap="round"/></svg>
+                <div><p class="d-pf-label">LICENSE PLATE</p><p class="d-pf-val" id="d-pf-plate">NYC-4821</p></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Settings list -->
+          <div class="d-settings-list">
+            <div class="d-setting-item" onclick="dShowToast('License details coming soon')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="2" y="5" width="20" height="14" rx="2" stroke="#333" stroke-width="1.8"/><path d="M8 12h8M8 9h3" stroke="#333" stroke-width="1.5" stroke-linecap="round"/></svg>
+              <div class="d-si-info"><p class="d-si-name">License Details</p></div>
+              <svg width="8" height="14"><path d="M1 1L7 7L1 13" stroke="#ccc" stroke-width="1.5" fill="none"/></svg>
+            </div>
+            <div class="d-setting-item" onclick="dShowToast('Help & Support coming soon')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#333" stroke-width="1.8"/><path d="M9 9C9 7.34 10.34 6 12 6c1.66 0 3 1.34 3 3 0 1.66-3 3-3 3v2" stroke="#333" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="17" r=".5" fill="#333" stroke="#333" stroke-width="1.5"/></svg>
+              <div class="d-si-info"><p class="d-si-name">Help &amp; Support</p></div>
+              <svg width="8" height="14"><path d="M1 1L7 7L1 13" stroke="#ccc" stroke-width="1.5" fill="none"/></svg>
+            </div>
+            <div class="d-setting-item" onclick="dShowToast('Settings coming soon')">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="#333" stroke-width="1.8"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="#333" stroke-width="1.8"/></svg>
+              <div class="d-si-info"><p class="d-si-name">Settings</p></div>
+              <svg width="8" height="14"><path d="M1 1L7 7L1 13" stroke="#ccc" stroke-width="1.5" fill="none"/></svg>
+            </div>
+          </div>
+
+          <button class="d-btn-logout" onclick="dLogout()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            LOG OUT
+          </button>
+          <div style="height:90px"></div>
+        </div>
+        <nav class="d-bottom-nav">
+          <button class="d-bnav" onclick="dNav('home')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3L21 9.5V20H15v-5H9v5H3V9.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>Home</span>
+          </button>
+          <button class="d-bnav" onclick="dNav('trips')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 9h8M8 13h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Trips</span>
+          </button>
+          <button class="d-bnav" onclick="dNav('earnings')">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Earnings</span>
+          </button>
+          <button class="d-bnav active">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Profile</span>
+          </button>
+        </nav>
+      </div>
+
+    </div><!-- /screen-container -->
+  </div><!-- /phone-shell -->
+
+  <!-- Nav strip -->
+  <div class="d-nav-strip">
+    <div class="d-nav-label" id="d-nav-label">Splash · 1/13</div>
+    <div class="d-nav-dots" id="d-nav-dots">
+      <button class="d-ndot active" title="Splash" onclick="dNav('splash')"></button>
+      <button class="d-ndot" title="Login" onclick="dNav('login')"></button>
+      <button class="d-ndot" title="OTP" onclick="dNav('otp')"></button>
+      <button class="d-ndot" title="Home" onclick="dNav('home')"></button>
+      <button class="d-ndot" title="Request" onclick="dNav('request')"></button>
+      <button class="d-ndot" title="Trip Detail" onclick="dNav('tripdetail')"></button>
+      <button class="d-ndot" title="Navigating" onclick="dNav('navigating')"></button>
+      <button class="d-ndot" title="Waiting" onclick="dNav('waiting')"></button>
+      <button class="d-ndot" title="Active Trip" onclick="dNav('activetrip')"></button>
+      <button class="d-ndot" title="Completion" onclick="dNav('completion')"></button>
+      <button class="d-ndot" title="Trips" onclick="dNav('trips')"></button>
+      <button class="d-ndot" title="Earnings" onclick="dNav('earnings')"></button>
+      <button class="d-ndot" title="Profile" onclick="dNav('profile')"></button>
+    </div>
+  </div>
+</div>
+
+<!-- SDK Web Dependencies -->
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-messaging-compat.js"></script>
+<script src="socket.io.min.js"></script>
+<!-- Supabase JS SDK removed: driver app uses Socket.IO for all real-time updates -->
+<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzOlbBrVt1-xTovt3EWEw-YGkDi5hwUtU&libraries=places"></script> -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- Firebase Client Initialization & Configuration Settings -->
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCzOlbBrVt1-xTovt3EWEw-YGkDi5hwUtU",
+    authDomain: "airride-6f0b4.firebaseapp.com",
+    projectId: "airride-6f0b4",
+    storageBucket: "airride-6f0b4.firebasestorage.app",
+    messagingSenderId: "88057306071",
+    appId: "1:88057306071:web:3c4821a48d4a5ecfacc992",
+    measurementId: "G-PPZX971MQQ"
+  };
+  firebase.initializeApp(firebaseConfig);
+
+  window.AIRRIDE_CONFIG = {
+    API_BASE: 'http://localhost:3000/api',
+    WS_URL: 'http://localhost:3000',
+    GOOGLE_MAPS_KEY: 'AIzaSyCzOlbBrVt1-xTovt3EWEw-YGkDi5hwUtU',
+    MAP_PROVIDER: 'osm'
+  };
+</script>
+
+<script src="driver-app.js"></script>
+</body>
+</html>
